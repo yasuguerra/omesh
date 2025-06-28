@@ -1,0 +1,10 @@
+dash
+dash-bootstrap-components
+dash-iconify
+sqlalchemy>=2.0
+pymysql>=1.1
+python-dotenv
+google-analytics-data
+plotly>=5.20
+fastapi
+uvicorn

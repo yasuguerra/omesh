@@ -7,7 +7,7 @@ import re
 from datetime import datetime, timedelta
 
 # Dependencias de tu proyecto
-from config import FB_ACCESS_TOKEN
+from ..settings import FB_ACCESS_TOKEN
 from utils import query_ga
 
 # --- Funciones de 'ops_sales.py' ---
