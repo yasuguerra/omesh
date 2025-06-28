@@ -10,27 +10,27 @@ import logging
 # --- Funciones de UI reutilizables ---
 
 def create_ai_chat_interface(tab_id_prefix):
-    """Crea la interfaz de chat con la IA para una pestaña específica."""
+    """Create chat interface for a specific tab."""
     return dbc.Card([
         dbc.CardHeader(f"Chat with Omesh AI 🤖 ({tab_id_prefix})", className="text-white bg-primary"),
         dbc.CardBody([
             html.Div(id=f'{tab_id_prefix}-chat-history', style={'height': '150px', 'overflowY': 'scroll', 'border': '1px solid #ccc', 'padding': '10px', 'marginBottom': '10px', 'background': '#f8f9fa'}),
             dbc.InputGroup([
-                dbc.Input(id=f'{tab_id_prefix}-chat-input', placeholder="Pregúntale algo a la IA..."),
-                dbc.Button("Enviar", id=f'{tab_id_prefix}-chat-submit', color="primary", n_clicks=0),
+                dbc.Input(id=f'{tab_id_prefix}-chat-input', placeholder="Ask the AI something..."),
+                dbc.Button("Send", id=f'{tab_id_prefix}-chat-submit', color="primary", n_clicks=0),
             ])
         ])
     ], className="mt-4")
 
 def create_ai_insight_card(card_id_visible, title="🤖 AI Analysis"):
-    """Crea una tarjeta para mostrar el análisis de la IA."""
+    """Create a card to display AI analysis."""
     return dbc.Card(dbc.CardBody([
         html.H4(title, className="card-title text-primary"),
         html.P(id=card_id_visible)
     ]), className="mt-3 shadow-sm", color="light")
 
 def add_trendline(fig, df, x_col, y_col):
-    """Añade una línea de tendencia a una figura de Plotly."""
+    """Add a trendline to a Plotly figure."""
     if not df.empty and y_col in df.columns and x_col in df.columns:
         df_sorted = df.sort_values(x_col).dropna(subset=[y_col]).copy()
         if len(df_sorted) >= 2:
@@ -47,7 +47,7 @@ def add_trendline(fig, df, x_col, y_col):
                     line=dict(color='darkred', dash='dash', width=2.5)
                 ))
             except Exception as e:
-                logging.warning(f"No se pudo calcular la línea de tendencia para {y_col}: {e}")
+                logging.warning(f"Trendline computation failed para {y_col}: {e}")
     return fig
 
 def generate_wordcloud(text):
@@ -70,10 +70,10 @@ def create_ops_sales_layout():
     """Crea el layout para la pestaña de Operaciones y Ventas."""
     ai_insight_card_style = {"marginTop": "20px", "marginBottom": "20px"}
     return html.Div([
-        html.H1("🛩️ Sky Ride Comparativo", style={'textAlign': 'center', 'margin-bottom': 20}),
+        html.H1("🛩️ Sky Ride Comparison", style={'textAlign': 'center', 'margin-bottom': 20}),
         dcc.Upload(
             id='upload-data',
-            children=html.Div(['Arrastra o ', html.A('Selecciona uno o varios archivos CSV')]),
+            children=html.Div(['Drag or ', html.A('Select one or more CSV files')]),
             style={
                 'width': '98%', 'height': '60px', 'lineHeight': '60px',
                 'borderWidth': '2px', 'borderStyle': 'dashed', 'borderRadius': '10px',
@@ -84,28 +84,28 @@ def create_ops_sales_layout():
         dbc.Container(id='output-kpis', fluid=True, className="mb-4"),
         html.Div([
             html.Div([
-                html.Label("Filtrar por destino:"),
-                dcc.Dropdown(id='destino-filter', multi=True, placeholder="Selecciona uno o varios destinos")
+                html.Label("Filter by destination:"),
+                dcc.Dropdown(id='destino-filter', multi=True, placeholder="Select one or more destinations")
             ], style={'width': '30%', 'display': 'inline-block', 'margin-right': '2%'}),
             html.Div([
-                html.Label("Filtrar por operador:"),
-                dcc.Dropdown(id='operador-filter', multi=True, placeholder="Selecciona uno o varios operadores")
+                html.Label("Filter by operator:"),
+                dcc.Dropdown(id='operador-filter', multi=True, placeholder="Select one or more operators")
             ], style={'width': '30%', 'display': 'inline-block', 'margin-right': '2%'}),
             html.Div([
-                html.Label("Filtrar por mes:"),
-                dcc.Dropdown(id='mes-filter', multi=True, placeholder="Selecciona uno o varios meses")
+                html.Label("Filter by month:"),
+                dcc.Dropdown(id='mes-filter', multi=True, placeholder="Select one or more months")
             ], style={'width': '30%', 'display': 'inline-block'}),
         ], style={'margin-bottom': '30px'}),
         dcc.Tabs([
-            dcc.Tab(label='Comparativo General', children=[
-                html.H3("Comparativo por Mes"),
+            dcc.Tab(label='General Comparison', children=[
+                html.H3("Monthly Comparison"),
                 dcc.Graph(id='vuelos-mes'),
                 dcc.Graph(id='ingresos-mes'),
                 dcc.Graph(id='ganancia-mes'),
                 html.Hr(),
-                html.H3("Ganancia Mensual Total (línea de tiempo + tendencia)"),
+                html.H3("Total Monthly Profit (timeline + trend)"),
                 dcc.Graph(id='ganancia-total-mes'),
-                html.H3("Operaciones Mensuales Totales (línea + tendencia)"),
+                html.H3("Total Monthly Operations (trend)"),
                 dcc.Graph(id='ops-total-mes'),
                 html.Hr(),
                 html.H3("Series de Tiempo Comparativas (Semanal)"),
@@ -117,47 +117,47 @@ def create_ops_sales_layout():
                     html.P(id='ai-insight-comparativo-general')
                 ]), style=ai_insight_card_style, color="light", className="shadow-sm")
             ]),
-            dcc.Tab(label='Vuelos y Destinos', children=[
-                html.H3("Top Destinos por Número de Vuelos (descendente)"),
+            dcc.Tab(label='Flights and Destinations', children=[
+                html.H3("Top Destinations by Number of Flights (descending)"),
                 dcc.Graph(id='top-destinos-vuelos'),
-                html.H3("Top Destinos por Ganancia (descendente)"),
+                html.H3("Top Destinations by Profit (descending)"),
                 dcc.Graph(id='top-destinos-ganancia'),
-                html.H3("Top Destinos por Pasajeros (descendente)"),
+                html.H3("Top Destinations by Passengers (descending)"),
                 dcc.Graph(id='pasajeros-destino'),
                 dbc.Card(dbc.CardBody([
-                    html.H4("🤖 Análisis IA SkyIntel", className="card-title text-primary"),
+                    html.H4("🤖 AI Analysis", className="card-title text-primary"),
                     html.P(id='ai-insight-vuelos-destinos')
                 ]), style=ai_insight_card_style, color="light", className="shadow-sm")
             ]),
-            dcc.Tab(label='Operadores y Aeronaves', children=[
-                html.H3("Vuelos por Operador (ordenado de mayor a menor)"),
+            dcc.Tab(label='Operators and Aircraft', children=[
+                html.H3("Flights per Operator (descending)"),
                 dcc.Graph(id='vuelos-operador'),
-                html.H3("Ganancia por Aeronave (ordenado de mayor a menor)"),
+                html.H3("Profit by Aircraft (descending)"),
                 dcc.Graph(id='ganancia-aeronave'),
-                html.H3("Operadores con más Ganancias Totales"),
+                html.H3("Operators with Highest Total Profit"),
                 dcc.Graph(id='top-ganancia-operador'),
-                html.H3("Aeronaves con más Ganancias Totales"),
+                html.H3("Aircraft with Highest Total Profit"),
                 dcc.Graph(id='top-ganancia-aeronave'),
                 dbc.Card(dbc.CardBody([
-                    html.H4("🤖 Análisis IA SkyIntel", className="card-title text-primary"),
+                    html.H4("🤖 AI Analysis", className="card-title text-primary"),
                     html.P(id='ai-insight-operadores-aeronaves')
                 ]), style=ai_insight_card_style, color="light", className="shadow-sm")
             ]),
-            dcc.Tab(label='Análisis Avanzado', children=[
+            dcc.Tab(label='Advanced Analysis', children=[
                 html.Div([
-                    html.Label("Selecciona Destino para Heatmap:"),
-                    dcc.Dropdown(id='destino-heatmap', placeholder="Elige destino", style={'width': '50%'}),
+                    html.Label("Select Destination for Heatmap:"),
+                    dcc.Dropdown(id='destino-heatmap', placeholder="Choose destination", style={'width': '50%'}),
                 ], style={'margin-bottom': '20px'}),
-                html.H3("Heatmap: Día y Hora por Destino (Ganancia)"),
+                html.H3("Heatmap: Day and Hour per Destination (Profit)"),
                 dcc.Graph(id='heatmap-gain-destino-dia'),
-                html.H3("Heatmap: Día y Hora por Destino (Operaciones)"),
+                html.H3("Heatmap: Day and Hour per Destination (Operations)"),
                 dcc.Graph(id='heatmap-count-destino-dia'),
-                html.H3("Vuelos por Día y Hora (6am-18:00, último año, escala rdylbu)"),
+                html.H3("Flights by Day and Hour (6am-18:00, last year, rdylbu scale)"),
                 dcc.Graph(id='heatmap-dia-hora'),
-                html.H3("Ticket Promedio por Destino y Año"),
+                html.H3("Average Ticket by Destination and Year"),
                 dcc.Graph(id='ticket-promedio'),
                 dbc.Card(dbc.CardBody([
-                    html.H4("🤖 Análisis IA SkyIntel", className="card-title text-primary"),
+                    html.H4("🤖 AI Analysis", className="card-title text-primary"),
                     html.P(id='ai-insight-analisis-avanzado')
                 ]), style=ai_insight_card_style, color="light", className="shadow-sm")
             ]),
@@ -169,17 +169,17 @@ def create_ops_sales_layout():
     ])
 
 def create_web_social_layout(min_date_allowed, max_date_allowed, start_date_val, end_date_val):
-    """Crea el layout para la pestaña de Análisis Web y Redes Sociales."""
+    """Create the layout for the Web and Social Analytics tab."""
     return html.Div([
         dbc.Row([
             dbc.Col(dcc.DatePickerRange(id='date-picker', min_date_allowed=min_date_allowed, max_date_allowed=max_date_allowed, start_date=start_date_val, end_date=end_date_val, display_format='YYYY-MM-DD', className='mb-2'), width=12, md=6),
         ], className="mb-4"),
         html.Hr(),
         dcc.Tabs(id='main-tabs-selector-ws', value='overview_ws', children=[
-            dcc.Tab(label='Visión General del Negocio 🌐', value='overview_ws'),
+            dcc.Tab(label='Business Overview 🌐', value='overview_ws'),
             dcc.Tab(label='Google Analytics 📈', value='google_ws'),
             dcc.Tab(label='Google Ads 💰', value='google_ads_ws'),
-            dcc.Tab(label='Redes Sociales 📱', value='social_media_ws'),
+            dcc.Tab(label='Social Media 📱', value='social_media_ws'),
         ], className='mb-4'),
         dcc.Loading(id="loading-tabs-ws", type="circle", children=html.Div(id='main-tabs-content-ws')),
     ])

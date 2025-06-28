@@ -1,17 +1,17 @@
 import openai
 import logging
-from config import OPENAI_API_KEY
+from .settings import OPENAI_API_KEY
 
 openai.api_key = OPENAI_API_KEY
 
 def get_openai_response(prompt, context=""):
-    """Función para obtener respuesta de OpenAI."""
+    """Get a response from OpenAI."""
     try:
-        full_prompt = f"{context}\n\nPregunta/Tarea: {prompt}\n\nResponde en español:"
+        full_prompt = f"{context}\n\nPregunta/Tarea: {prompt}\n\nRespond in English:"
         response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "Eres SkyIntel AI, un asistente experto en análisis de datos web, GA4 y redes sociales. Responde en español, claro, conciso y enfocado en insights accionables."},
+                {"role": "system", "content": "You are Omesh AI assistant specializing in web and social analytics. Respond in clear and concise English focused on actionable insights."},
                 {"role": "user", "content": full_prompt}
             ]
         )

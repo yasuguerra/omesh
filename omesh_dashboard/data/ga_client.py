@@ -3,7 +3,7 @@ from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import DateRange, Dimension, Metric, RunReportRequest
 from google.oauth2 import service_account
 import logging
-from config import GA_PROPERTY_ID, GA_KEY_PATH
+from ..settings import GA_PROPERTY_ID, GA_KEY_PATH
 
 logging.basicConfig(level=logging.INFO)
 

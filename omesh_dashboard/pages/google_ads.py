@@ -21,7 +21,7 @@ import pandas as pd
 import plotly.express as px
 from dash import Input, Output, State, dcc, html
 
-import google_ads_api as gads  # 🔌 real integration
+from ..data import google_ads_api as gads  # 🔌 real integration
 
 ##############################################################################
 # 🔧  Helpers
@@ -143,3 +143,12 @@ def _render_content(data):
 ##############################################################################
 #   END OF MODULE – import get_google_ads_tab and embed it anywhere you want ♥
 ##############################################################################
+
+def layout(app: dash.Dash) -> dbc.Container:
+    """Return the Google Ads layout container."""
+    return get_google_ads_tab(app)
+
+
+def register_callbacks(app: dash.Dash) -> None:
+    """Callbacks are registered at import time via dash.callback decorators."""
+    pass
